@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>US Truck Sales — 30s Spot / Animatic</title>
+<style>
+  :root{
+    --ink:#0f0b08; --panel:#1a1310; --panel-2:#221812;
+    --amber:#e9a13b; --amber-soft:#f6c987; --cream:#f4e9d8;
+    --muted:#a89584; --line:#3a2a20; --serif:Georgia,"Times New Roman",serif;
+    --sans:"Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1200px 600px at 20% -10%, #3a2012 0%, transparent 60%),
+      radial-gradient(900px 500px at 110% 20%, #2a160d 0%, transparent 55%),
+      var(--ink);
+    color:var(--cream); font-family:var(--sans); line-height:1.5;
+    padding:40px 24px 72px;
+  }
+  .wrap{max-width:1120px;margin:0 auto}
+  .eyebrow{
+    font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--amber);font-weight:600;display:flex;gap:12px;align-items:center;flex-wrap:wrap
+  }
+  .eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--amber);display:inline-block}
+  h1{
+    font-family:var(--serif);font-weight:400;font-size:clamp(34px,5vw,58px);
+    line-height:1.02;letter-spacing:-.015em;margin:14px 0 8px
+  }
+  h1 em{font-style:italic;color:var(--amber-soft)}
+  .dek{color:var(--muted);max-width:64ch;margin:0 0 22px;font-size:15px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+  .chip{
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    border:1px solid var(--line);background:#160f0b;padding:6px 11px;border-radius:999px
+  }
+  .chip b{color:var(--cream);font-weight:600}
+
+  /* stage */
+  .stage{
+    position:relative;border-radius:16px;overflow:hidden;
+    border:1px solid var(--line);background:#000;
+    box-shadow:0 30px 80px -30px #000, 0 0 0 1px #000 inset;
+    aspect-ratio:16/9
+  }
+  .stage svg{display:block;width:100%;height:100%}
+  .hud{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:16px}
+  .hud-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .tc{
+    font-variant-numeric:tabular-nums;font-size:12px;letter-spacing:.16em;
+    background:#000a;border:1px solid #ffffff22;padding:5px 9px;border-radius:6px;color:var(--cream)
+  }
+  .shot-no{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#0009;background:var(--amber);padding:5px 9px;border-radius:6px;font-weight:700}
+  .hud-bottom{
+    background:linear-gradient(to top,#000 0%,#000a 55%,transparent 100%);
+    margin:-16px;padding:52px 28px 20px;
+  }
+  .vo{font-family:var(--serif);font-size:clamp(17px,2.4vw,26px);line-height:1.25;margin:0 0 6px;max-width:34ch}
+  .sub{font-size:12px;letter-spacing:.08em;color:var(--amber-soft);text-transform:uppercase}
+  .logo-bug{
+    position:absolute;right:20px;bottom:16px;width:7.4%;z-index:3;
+    opacity:.96;pointer-events:none;padding:5px;border-radius:8px;
+    background:rgba(11,6,4,.3);filter:drop-shadow(0 4px 12px rgba(0,0,0,.55));
+    transition:opacity .2s ease;
+  }
+  .logo-bug.hidden{opacity:0}
+
+  /* controls */
+  .bar{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+  .btns{display:flex;gap:8px}
+  button{
+    font-family:var(--sans);font-size:13px;color:var(--cream);cursor:pointer;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:9px;
+    padding:9px 14px;transition:.15s;display:inline-flex;align-items:center;gap:8px
+  }
+  button:hover{border-color:var(--amber);color:var(--amber-soft)}
+  button.primary{background:var(--amber);color:#1a1006;border-color:var(--amber);font-weight:700}
+  button.primary:hover{background:var(--amber-soft);color:#1a1006}
+  .track{flex:1;min-width:160px;height:5px;background:#2a1d15;border-radius:99px;overflow:hidden}
+  .fill{height:100%;width:0;background:linear-gradient(90deg,#b8732a,var(--amber-soft));border-radius:99px;transition:width .08s linear}
+  .counter{font-size:12px;letter-spacing:.14em;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  /* detail panel */
+  .detail{
+    display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:0;
+    margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)
+  }
+  .detail > div{padding:16px 18px;border-right:1px solid var(--line)}
+  .detail > div:last-child{border-right:0}
+  .k{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:6px;font-weight:700}
+  .v{font-size:13px;color:var(--cream);margin:0}
+  .v.mut{color:var(--muted)}
+
+  /* thumbnails */
+  .thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px}
+  .thumb{
+    text-align:left;padding:10px 12px;border-radius:9px;background:#160f0b;border:1px solid var(--line);
+    color:var(--muted);font-size:11px;line-height:1.3;min-height:64px
+  }
+  .thumb b{display:block;color:var(--cream);font-size:11px;letter-spacing:.14em;margin-bottom:3px}
+  .thumb.on{border-color:var(--amber);background:#2a1c11;color:var(--amber-soft)}
+  .thumb.on b{color:var(--amber-soft)}
+
+  /* rundown */
+  h2{font-family:var(--serif);font-weight:400;font-size:26px;margin:44px 0 4px}
+  .h2sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{
+    text-align:left;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--amber);font-weight:700;padding:10px 12px;border-bottom:1px solid var(--line)
+  }
+  td{padding:12px;border-bottom:1px solid #2a1d15;vertical-align:top;color:var(--cream)}
+  td.num{color:var(--amber-soft);font-variant-numeric:tabular-nums;white-space:nowrap}
+  td.mut{color:var(--muted)}
+  tr:hover td{background:#1a120d}
+
+  .notes{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;margin-top:34px}
+  .card{border:1px solid var(--line);border-radius:12px;padding:20px;background:var(--panel)}
+  .sw{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+  .sw span{width:64px;height:44px;border-radius:7px;border:1px solid #ffffff18;display:flex;align-items:flex-end;font-size:9px;letter-spacing:.06em;padding:5px;color:#0008}
+  .card p{font-size:13px;color:var(--muted);margin:0}
+  .card p + p{margin-top:10px}
+  footer{margin-top:36px;color:#6e5d50;font-size:11px;letter-spacing:.06em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  @media (max-width:860px){
+    .detail{grid-template-columns:1fr 1fr}
+    .detail > div{border-bottom:1px solid var(--line)}
+    .thumbs{grid-template-columns:repeat(3,1fr)}
+    .notes{grid-template-columns:1fr}
+  }
+  @media (max-width:460px){.thumbs{grid-template-columns:repeat(2,1fr)}.detail{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow"><span>US Truck Sales</span><span class="dot"></span><span>30-second spot</span><span class="dot"></span><span>South Gate, CA</span></div>
+  <h1>Every truck deserves<br>a <em>second act.</em></h1>
+  <p class="dek">A warm, cinematic spot for US Truck Sales in South Gate — used cars, trucks, and heavy-duty rigs. One spokesperson, one golden hour, six shots. Shoot it as-is or generate it shot-by-shot; prompts are in <code>prompts.md</code>.</p>
+  <div class="chips">
+    <span class="chip"><b>16:9</b> · 24 fps</span>
+    <span class="chip"><b>30s</b> · 6 shots</span>
+    <span class="chip"><b>Cars · Trucks</b> · Heavy Duty</span>
+    <span class="chip"><b>South Gate</b>, CA</span>
+  </div>
+
+  <div class="stage" id="stage" aria-live="polite">
+    <div class="hud">
+      <div class="hud-top">
+        <div class="tc" id="tc">00:00 / 00:30</div>
+        <div class="shot-no" id="shotno">Shot 1 / 6</div>
+      </div>
+      <div class="hud-bottom">
+        <p class="vo" id="vo"></p>
+        <div class="sub" id="sub"></div>
+      </div>
+    </div>
+    <img class="logo-bug hidden" id="logo-bug" src="logo.png" alt="US Truck Sales" />
+  </div>
+
+  <div class="bar">
+    <div class="btns">
+      <button class="primary" id="play" aria-label="Play animatic">▶ Play</button>
+      <button id="prev" aria-label="Previous shot">‹ Prev</button>
+      <button id="next" aria-label="Next shot">Next ›</button>
+    </div>
+    <div class="track" aria-hidden="true"><div class="fill" id="fill"></div></div>
+    <div class="counter" id="counter">00:00</div>
+  </div>
+
+  <div class="detail" id="detail">
+    <div><div class="k">Action</div><p class="v" id="d-action"></p></div>
+    <div><div class="k">Camera</div><p class="v mut" id="d-cam"></p></div>
+    <div><div class="k">Light</div><p class="v mut" id="d-light"></p></div>
+    <div><div class="k">Sound</div><p class="v mut" id="d-audio"></p></div>
+  </div>
+
+  <div class="thumbs" id="thumbs"></div>
+
+  <h2>Rundown</h2>
+  <p class="h2sub">Picture cut to 24 fps. VO is sparse on purpose — the lot does the talking.</p>
+  <table>
+    <thead><tr><th>#</th><th>Time</th><th>Shot</th><th>Voiceover</th><th>Camera</th></tr></thead>
+    <tbody>
+      <tr><td class="num">01</td><td class="num">0:00–0:03</td><td>The turn</td><td>“You think ‘used’ means ‘used up.’”</td><td class="mut">85mm · slow push-in</td></tr>
+      <tr><td class="num">02</td><td class="num">0:03–0:08</td><td>The walk</td><td>“Look closer.”</td><td class="mut">35mm · gimbal follow</td></tr>
+      <tr><td class="num">03</td><td class="num">0:08–0:14</td><td>The proof</td><td>“Fully inspected. Every mile accounted for.”</td><td class="mut">Macro · three cuts</td></tr>
+      <tr><td class="num">04</td><td class="num">0:14–0:20</td><td>The lean</td><td>“Every rig here earns its second act.”</td><td class="mut">50mm · locked off</td></tr>
+      <tr><td class="num">05</td><td class="num">0:20–0:26</td><td>The handoff</td><td>“Go write the next chapter.”</td><td class="mut">35mm · handheld</td></tr>
+      <tr><td class="num">06</td><td class="num">0:26–0:30</td><td>End card</td><td>“US Truck Sales. South Gate. Certified. Inspected. Yours.”</td><td class="mut">Graphic · logo reveal</td></tr>
+    </tbody>
+  </table>
+
+  <div class="notes">
+    <div class="card">
+      <div class="k">Look &amp; grade</div>
+      <p>Golden hour only: sun low behind the subject, strong amber rim light, lifted shadows, soft halation. Terracotta and cream midtones, no cyan. Shallow depth of field throughout; lot signage stays soft except the closing card.</p>
+      <div class="sw">
+        <span style="background:#0f0b08;color:#f4e9d8aa">#0F0B08</span>
+        <span style="background:#7a3f1e;color:#f4e9d8">#7A3F1E</span>
+        <span style="background:#e9a13b;color:#2a1a09">#E9A13B</span>
+        <span style="background:#f4e9d8;color:#2a1a09">#F4E9D8</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="k">Continuity</div>
+      <p>Same wardrobe every shot: camel blazer, cream knit, gold hoops, thick dark-brown waves worn down. Hair silhouette is the character signature — keep it identical across generated frames.</p>
+      <p>US Truck Sales, South Gate CA · (323) 807-9678 · www.ustrucksalesinc.com. Inspection copy reads “fully inspected” — keep it that way unless a specific point count is documented.</p>
+    </div>
+  </div>
+
+  <footer>
+    <span>ANIMATIC — NOT FINAL FOOTAGE · vector previs for timing and framing</span>
+    <span>Prompts: us-truck-sales/prompts.md</span>
+  </footer>
+</div>
+
+<script>
+const AM = "#e9a13b", CREAM = "#f4e9d8";
+
+/* ---------- shared art helpers ---------- */
+const car = (x, y, s, o = 1) => `
+  <g transform="translate(${x} ${y}) scale(${s})" opacity="${o}">
+    <path d="M0 40 C4 26 16 20 34 18 L52 18 L66 -2 C70 -9 78 -13 88 -13 L132 -13 C142 -13 150 -9 154 -2 L168 18 L190 22 C204 25 212 31 214 40 L214 52 L0 52 Z"
+      fill="#1d110a" stroke="${AM}" stroke-opacity=".3" stroke-width="2"/>
+    <circle cx="46" cy="54" r="16" fill="#0d0805" stroke="${AM}" stroke-opacity=".3" stroke-width="2"/>
+    <circle cx="170" cy="54" r="16" fill="#0d0805" stroke="${AM}" stroke-opacity=".3" stroke-width="2"/>
+    <path d="M78 16 L90 -6 L128 -6 L142 16 Z" fill="${AM}" opacity=".16"/>
+  </g>`;
+
+const semi = (x, y, s, o = 1) => `
+  <g transform="translate(${x} ${y}) scale(${s})" opacity="${o}">
+    <rect x="0" y="-2" width="214" height="62" rx="5" fill="#1d110a" stroke="${AM}" stroke-opacity=".3" stroke-width="2"/>
+    <path d="M224 60 L224 8 C224 0 230 -6 240 -6 L270 -6 L284 18 L304 22 C312 24 316 30 316 38 L316 60 Z"
+      fill="#241408" stroke="${AM}" stroke-opacity=".3" stroke-width="2"/>
+    <path d="M244 4 H268 L278 20 H244 Z" fill="${AM}" opacity=".15"/>
+    <circle cx="42" cy="62" r="14" fill="#0d0805" stroke="${AM}" stroke-opacity=".3" stroke-width="2"/>
+    <circle cx="86" cy="62" r="14" fill="#0d0805" stroke="${AM}" stroke-opacity=".3" stroke-width="2"/>
+    <circle cx="130" cy="62" r="14" fill="#0d0805" stroke="${AM}" stroke-opacity=".3" stroke-width="2"/>
+    <circle cx="256" cy="62" r="16" fill="#0d0805" stroke="${AM}" stroke-opacity=".3" stroke-width="2"/>
+    <circle cx="296" cy="62" r="16" fill="#0d0805" stroke="${AM}" stroke-opacity=".3" stroke-width="2"/>
+  </g>`;
+
+const hairMass = `
+  <path d="M590 470 C560 300 660 190 800 190 C940 190 1040 300 1010 470 C1005 545 1020 640 1060 720
+           C1000 700 960 660 940 600 C930 660 900 700 860 720 C840 650 820 620 800 620
+           C780 620 760 650 740 720 C700 700 670 660 660 600 C640 660 600 700 540 720
+           C580 640 595 545 590 470 Z" fill="#231108"/>`;
+
+/* ---------- shot art ---------- */
+function shot1(){
+  return `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#170d08"/><stop offset=".55" stop-color="#6b3417"/><stop offset="1" stop-color="#cf7c31"/>
+      </linearGradient>
+      <radialGradient id="sun1"><stop offset="0" stop-color="#ffe2ad" stop-opacity=".95"/><stop offset=".45" stop-color="#f2a648" stop-opacity=".55"/><stop offset="1" stop-color="#f2a648" stop-opacity="0"/></radialGradient>
+      <linearGradient id="face1" x1="0" y1="0" x2="1" y2=".4">
+        <stop offset="0" stop-color="#4a2a18"/><stop offset=".55" stop-color="#6e4126"/><stop offset="1" stop-color="#9c6238"/>
+      </linearGradient>
+    </defs>
+    <rect width="1600" height="900" fill="url(#sky1)"/>
+    <circle cx="1215" cy="320" r="360" fill="url(#sun1)"/>
+    <g stroke="#ffd9a0" stroke-opacity=".22" stroke-width="2">
+      <line x1="0" y1="300" x2="1600" y2="270"/><line x1="0" y1="350" x2="1600" y2="320"/>
+    </g>
+    <path d="M400 900 C430 715 610 640 800 640 C990 640 1170 715 1200 900 Z" fill="#140b07"/>
+    ${hairMass}
+    <ellipse cx="800" cy="455" rx="128" ry="168" fill="url(#face1)"/>
+    <path d="M700 400 C760 430 860 430 900 396 C880 500 840 560 800 566 C752 560 714 500 700 400 Z" fill="#5b3520" opacity=".55"/>
+    <path d="M916 322 C956 400 954 522 908 604" stroke="#ffc879" stroke-width="7" fill="none" opacity=".65" stroke-linecap="round"/>
+    <g stroke="#4a2513" stroke-width="7" fill="none" stroke-linecap="round" opacity=".85">
+      <path d="M652 300 C620 400 612 520 642 640"/>
+      <path d="M704 246 C662 360 652 520 678 642"/>
+      <path d="M948 300 C984 400 994 520 958 640"/>
+      <path d="M898 246 C940 360 950 500 926 624"/>
+    </g>
+    <path d="M766 545 C786 560 818 560 838 544" stroke="#2a140a" stroke-width="6" fill="none" opacity=".55"/>
+    <path d="M742 432 C764 424 788 424 806 434" stroke="#2a140a" stroke-width="6" fill="none" opacity=".45" stroke-linecap="round"/>
+    <path d="M842 432 C866 423 892 423 912 432" stroke="#2a140a" stroke-width="6" fill="none" opacity=".45" stroke-linecap="round"/>
+    <rect y="820" width="1600" height="80" fill="#0c0704" opacity=".55"/>
+  </svg>`;
+}
+
+function shot2(){
+  return `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#20110a"/><stop offset=".5" stop-color="#8a451d"/><stop offset="1" stop-color="#e79a4a"/>
+      </linearGradient>
+      <radialGradient id="sun2"><stop offset="0" stop-color="#ffe7b8" stop-opacity=".95"/><stop offset=".5" stop-color="#f4ad55" stop-opacity=".5"/><stop offset="1" stop-color="#f4ad55" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="1600" height="900" fill="url(#sky2)"/>
+    <circle cx="1290" cy="545" r="300" fill="url(#sun2)"/>
+    <g opacity=".5" fill="#2a160d">
+      <rect x="0" y="470" width="140" height="160"/><rect x="150" y="500" width="90" height="130"/>
+      <rect x="1360" y="455" width="120" height="175"/><rect x="1490" y="495" width="110" height="135"/>
+    </g>
+    <rect y="628" width="1600" height="272" fill="#1a0f09"/>
+    <path d="M0 628 H1600" stroke="${AM}" stroke-opacity=".25"/>
+    <!-- showroom -->
+    <g>
+      <rect x="70" y="368" width="430" height="262" fill="#2a1810" stroke="${AM}" stroke-opacity=".3"/>
+      <g stroke="${AM}" stroke-opacity=".22">
+        <line x1="178" y1="368" x2="178" y2="630"/><line x1="286" y1="368" x2="286" y2="630"/><line x1="394" y1="368" x2="394" y2="630"/>
+      </g>
+      <g fill="${AM}" opacity=".3">
+        <rect x="86" y="386" width="76" height="54"/><rect x="194" y="386" width="76" height="54"/>
+        <rect x="302" y="386" width="76" height="54"/><rect x="410" y="386" width="76" height="54"/>
+        <rect x="86" y="458" width="76" height="54"/><rect x="302" y="458" width="76" height="54"/>
+      </g>
+      <rect x="70" y="348" width="430" height="20" fill="#160d08" stroke="${AM}" stroke-opacity=".25"/>
+      <text x="86" y="338" fill="${AM}" fill-opacity=".75" font-family="Segoe UI,sans-serif" font-size="16" letter-spacing="4">US TRUCK SALES</text>
+    </g>
+    <!-- bunting -->
+    <path d="M0 210 Q420 300 840 218 T1600 206" fill="none" stroke="#ffce8e" stroke-opacity=".28" stroke-width="2"/>
+    <g fill="#ffd9a0" opacity=".6">
+      <circle cx="170" cy="258" r="5"/><circle cx="420" cy="286" r="5"/><circle cx="660" cy="262" r="5"/>
+      <circle cx="900" cy="236" r="5"/><circle cx="1150" cy="236" r="5"/><circle cx="1400" cy="228" r="5"/>
+    </g>
+    ${semi(540, 556, .9, .95)}
+    ${car(870, 602, .72, .85)}
+    ${car(1080, 614, .55, .62)}
+    <!-- walking figure -->
+    <g transform="translate(1268 470)">
+      <path d="M-22 158 C-20 108 -10 82 0 80 C10 82 20 108 22 158 Z" fill="#120a06"/>
+      <path d="M-20 96 C-34 78 -40 58 -38 40 C-36 16 -22 4 0 4 C22 4 36 16 38 40 C40 58 34 78 20 96 Z" fill="#1d1109"/>
+      <circle cx="0" cy="34" r="20" fill="#5a3520"/>
+      <path d="M-24 34 C-24 8 -12 -4 0 -4 C12 -4 24 8 24 34 C20 20 12 14 0 14 C-12 14 -20 20 -24 34 Z" fill="#2a1409"/>
+      <path d="M18 34 C24 44 24 58 20 70" stroke="#ffc879" stroke-width="3" fill="none" opacity=".6"/>
+    </g>
+    <rect y="840" width="1600" height="60" fill="#0c0704" opacity=".5"/>
+
+  </svg>`;
+}
+
+function shot3(){
+  const panel = (x, label, icon) => `
+    <g>
+      <rect x="${x}" y="0" width="520" height="900" fill="#150d09"/>
+      <text x="${x+40}" y="86" fill="${AM}" font-family="Segoe UI,sans-serif" font-size="15" letter-spacing="6">${label}</text>
+      <line x1="${x+40}" y1="108" x2="${x+480}" y2="108" stroke="${AM}" stroke-opacity=".3"/>
+      ${icon(x)}
+    </g>`;
+  const engine = x => `
+    <g transform="translate(${x+90} 300)" fill="none" stroke="${CREAM}" stroke-opacity=".8" stroke-width="4">
+      <rect x="20" y="60" width="340" height="230" rx="16"/>
+      <rect x="60" y="20" width="260" height="40" rx="10"/>
+      <circle cx="90" cy="150" r="26"/><circle cx="250" cy="150" r="26"/><circle cx="330" cy="150" r="26"/>
+      <path d="M60 250 H320 M20 120 H0 M360 120 H380"/>
+      <path d="M90 60 V20 M250 60 V20" stroke-opacity=".4"/>
+    </g>
+    <circle cx="${x+440}" cy="720" r="4" fill="${AM}" opacity=".6"/>`;
+  const gauge = x => `
+    <g transform="translate(${x+260} 400)" fill="none" stroke="${CREAM}" stroke-opacity=".8" stroke-width="4">
+      <path d="M-150 60 A150 150 0 0 1 150 60" stroke-width="6"/>
+      <g stroke="${AM}" stroke-opacity=".7" stroke-width="3">
+        <line x1="-150" y1="60" x2="-128" y2="60"/><line x1="-118" y1="-32" x2="-100" y2="-24"/>
+        <line x1="-60" y1="-96" x2="-50" y2="-80"/><line x1="0" y1="-116" x2="0" y2="-98"/>
+        <line x1="60" y1="-96" x2="50" y2="-80"/><line x1="118" y1="-32" x2="100" y2="-24"/>
+        <line x1="150" y1="60" x2="128" y2="60"/>
+      </g>
+      <line x1="0" y1="60" x2="62" y2="-50" stroke="${AM}" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="0" cy="60" r="12" fill="${CREAM}" stroke="none"/>
+    </g>
+    <text x="${x+260}" y="640" fill="${CREAM}" fill-opacity=".55" font-family="Segoe UI,sans-serif" font-size="15" text-anchor="middle" letter-spacing="3">FULLY INSPECTED</text>`;
+  const key = x => `
+    <g transform="translate(${x+150} 330)" fill="none" stroke="${CREAM}" stroke-opacity=".85" stroke-width="5">
+      <circle cx="70" cy="120" r="54"/>
+      <circle cx="70" cy="120" r="18" stroke-opacity=".5"/>
+      <path d="M124 120 H330 M270 120 V175 M310 120 V160"/>
+      <path d="M20 250 C50 200 110 190 150 230 C190 270 240 280 300 260" stroke-opacity=".45"/>
+    </g>
+    <circle cx="${x+430}" cy="300" r="5" fill="${AM}"/>`;
+  return `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+    <rect width="1600" height="900" fill="#100a07"/>
+    ${panel(0, "INSPECTION", engine)}
+    ${panel(540, "HISTORY", gauge)}
+    ${panel(1080, "DETAIL", key)}
+    <g stroke="${AM}" stroke-opacity=".28">
+      <line x1="530" y1="0" x2="530" y2="900"/><line x1="1070" y1="0" x2="1070" y2="900"/>
+    </g>
+    <rect y="840" width="1600" height="60" fill="#000" opacity=".45"/>
+
+  </svg>`;
+}
+
+function shot4(){
+  return `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="sky4" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#1c100a"/><stop offset=".6" stop-color="#7c3f1c"/><stop offset="1" stop-color="#d98a3f"/>
+      </linearGradient>
+      <linearGradient id="hood4" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3a2416"/><stop offset="1" stop-color="#150c07"/>
+      </linearGradient>
+    </defs>
+    <rect width="1600" height="900" fill="url(#sky4)"/>
+    <circle cx="240" cy="300" r="230" fill="#f0a24a" opacity=".22"/>
+    <!-- showroom right -->
+    <g>
+      <rect x="1080" y="380" width="520" height="260" fill="#2a1810" stroke="${AM}" stroke-opacity=".3"/>
+      <g fill="${AM}" opacity=".32">
+        <rect x="1100" y="400" width="90" height="58"/><rect x="1210" y="400" width="90" height="58"/>
+        <rect x="1320" y="400" width="90" height="58"/><rect x="1430" y="400" width="90" height="58"/>
+      </g>
+      <g stroke="${AM}" stroke-opacity=".2"><line x1="1205" y1="380" x2="1205" y2="640"/><line x1="1315" y1="380" x2="1315" y2="640"/><line x1="1425" y1="380" x2="1425" y2="640"/></g>
+      <rect x="1080" y="360" width="520" height="20" fill="#160d08"/>
+    </g>
+    <rect y="630" width="1600" height="270" fill="#160d08"/>
+    <!-- hero truck hood -->
+    <path d="M-40 900 C40 720 300 622 600 622 C860 622 1010 690 1090 790 L1110 900 Z" fill="url(#hood4)"/>
+    <path d="M60 760 C240 690 430 660 640 660" stroke="#ffce8e" stroke-opacity=".35" stroke-width="5" fill="none"/>
+    <path d="M130 830 C320 770 480 744 700 744" stroke="#ffce8e" stroke-opacity=".18" stroke-width="4" fill="none"/>
+    <!-- figure leaning -->
+    <g transform="translate(700 190)">
+      <path d="M-122 470 C-118 330 -86 210 0 196 C86 210 118 330 122 470 Z" fill="#2a1a10"/>
+      <path d="M-122 470 C-118 330 -86 210 0 196 C86 210 118 330 122 470" fill="none" stroke="${AM}" stroke-opacity=".3" stroke-width="3"/>
+      <path d="M-96 196 C-120 120 -104 40 -60 8 C-18 -22 40 -14 74 26 C104 62 110 130 92 196 C74 150 50 120 0 116 C-50 120 -78 150 -96 196 Z" fill="#221008"/>
+      <ellipse cx="0" cy="150" rx="60" ry="72" fill="#6e4126"/>
+      <path d="M-60 150 C-60 96 -36 74 0 74 C36 74 60 96 60 150 C50 118 32 104 0 104 C-32 104 -50 118 -60 150 Z" fill="#2a1409"/>
+      <path d="M52 118 C66 140 66 176 56 198" stroke="#ffc879" stroke-width="4" fill="none" opacity=".55"/>
+      <!-- crossed arms -->
+      <path d="M-92 300 C-40 336 40 336 92 300" stroke="#33200f" stroke-width="34" fill="none" stroke-linecap="round"/>
+      <path d="M-92 300 C-40 336 40 336 92 300" stroke="${AM}" stroke-opacity=".25" stroke-width="3" fill="none"/>
+    </g>
+    <rect y="830" width="1600" height="70" fill="#0c0704" opacity=".5"/>
+
+  </svg>`;
+}
+
+function shot5(){
+  return `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="sky5" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#1a0e08"/><stop offset=".55" stop-color="#7e3f1b"/><stop offset="1" stop-color="#e2953f"/>
+      </linearGradient>
+      <radialGradient id="sun5"><stop offset="0" stop-color="#ffe6b4" stop-opacity=".9"/><stop offset=".5" stop-color="#f3a94a" stop-opacity=".45"/><stop offset="1" stop-color="#f3a94a" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="1600" height="900" fill="url(#sky5)"/>
+    <circle cx="800" cy="500" r="330" fill="url(#sun5)"/>
+    <rect y="640" width="1600" height="260" fill="#170d08"/>
+    ${car(1080, 520, 1.15, .9)}
+    <!-- her -->
+    <g transform="translate(520 300)">
+      <path d="M-58 340 C-54 210 -28 132 0 126 C28 132 54 210 58 340 Z" fill="#2a1a10"/>
+      <path d="M-46 126 C-62 70 -50 16 -22 -6 C8 -28 46 -18 62 10 C80 40 78 92 58 126 C46 92 30 70 0 68 C-30 70 -38 92 -46 126 Z" fill="#221008"/>
+      <ellipse cx="0" cy="86" rx="46" ry="54" fill="#6e4126"/>
+      <path d="M-46 86 C-46 44 -26 26 0 26 C26 26 46 44 46 86 C38 62 24 50 0 50 C-24 50 -38 62 -46 86 Z" fill="#2a1409"/>
+      <!-- extended arm -->
+      <path d="M42 200 C96 196 140 186 178 178" stroke="#2a1a10" stroke-width="26" fill="none" stroke-linecap="round"/>
+      <circle cx="188" cy="176" r="7" fill="${AM}"/>
+      <g stroke="${AM}" stroke-opacity=".7"><line x1="188" y1="150" x2="188" y2="136"/><line x1="206" y1="162" x2="218" y2="152"/><line x1="170" y1="162" x2="158" y2="152"/></g>
+    </g>
+    <!-- couple -->
+    <g transform="translate(900 330)">
+      <path d="M-56 310 C-52 200 -28 130 0 124 C28 130 52 200 56 310 Z" fill="#241408" transform="translate(-34 0)"/>
+      <circle cx="-34" cy="86" r="42" fill="#5f3a22"/>
+      <path d="M-76 86 C-76 48 -58 30 -34 30 C-10 30 8 48 8 86 C0 64 -14 54 -34 54 C-54 54 -68 64 -76 86 Z" fill="#1f1008"/>
+      <path d="M30 310 C34 200 56 130 84 124 C112 130 136 200 140 310 Z" fill="#2a1a10"/>
+      <circle cx="84" cy="86" r="40" fill="#734628"/>
+      <path d="M44 86 C44 50 60 32 84 32 C108 32 124 50 124 86 C116 66 102 56 84 56 C66 56 52 66 44 86 Z" fill="#2a1409"/>
+      <path d="M52 250 C74 266 96 266 116 250" stroke="${AM}" stroke-opacity=".35" stroke-width="3" fill="none"/>
+    </g>
+    <path d="M0 700 H1600" stroke="${AM}" stroke-opacity=".18"/>
+    <rect y="840" width="1600" height="60" fill="#0c0704" opacity=".5"/>
+
+  </svg>`;
+}
+
+function shot6(){
+  return `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <radialGradient id="bg6" cx=".5" cy=".42" r=".72">
+        <stop offset="0" stop-color="#3a2313"/><stop offset=".6" stop-color="#1a100a"/><stop offset="1" stop-color="#0c0705"/>
+      </radialGradient>
+      <radialGradient id="glow6"><stop offset="0" stop-color="#e9a13b" stop-opacity=".18"/><stop offset="1" stop-color="#e9a13b" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="1600" height="900" fill="url(#bg6)"/>
+    <circle cx="800" cy="330" r="360" fill="url(#glow6)"/>
+    <image href="logo.png" x="580" y="100" width="440" height="340" preserveAspectRatio="xMidYMid meet"
+      style="filter:drop-shadow(0 10px 34px rgba(0,0,0,.6))"/>
+    <line x1="470" y1="512" x2="1130" y2="512" stroke="${AM}" stroke-opacity=".35"/>
+    <text x="800" y="584" fill="${CREAM}" fill-opacity=".8" font-family="Georgia,serif" font-size="26" text-anchor="middle" font-style="italic">Certified. Inspected. Yours.</text>
+    <text x="800" y="644" fill="${CREAM}" fill-opacity=".55" font-family="Segoe UI,sans-serif" font-size="16" text-anchor="middle" letter-spacing="6">USED CARS · TRUCKS · HEAVY DUTY</text>
+    <text x="800" y="736" fill="${CREAM}" fill-opacity=".38" font-family="Segoe UI,sans-serif" font-size="15" text-anchor="middle" letter-spacing="4">SOUTH GATE, CA · (323) 807-9678 · WWW.USTRUCKSALESINC.COM</text>
+  </svg>`;
+}
+
+/* ---------- shot data ---------- */
+const shots = [
+  { n:1, dur:3, tc:"0:00–0:03", short:"The turn", vo:"“You think ‘used’ means ‘used up.’”",
+    sub:"Cold open · extreme close-up",
+    action:"Golden hour. Wind lifts a strand of thick wavy hair. She turns from profile into lens — half-smile, chin down, eyes up.",
+    cam:"85mm · f/1.4 · 5% slow push-in",
+    light:"Hard backlight, amber rim, 1/4 flare",
+    audio:"Vinyl crackle, low sub thump", art:shot1 },
+  { n:2, dur:5, tc:"0:03–0:08", short:"The walk", vo:"“Look closer.”",
+    sub:"Wide · dealership lot",
+    action:"She walks the front row, trailing a hand along a hood, showroom glass glowing behind. She glances back to camera.",
+    cam:"35mm · gimbal follow, chest height",
+    light:"Sun behind her, practicals on",
+    audio:"Heels on asphalt, distant traffic", art:shot2 },
+  { n:3, dur:6, tc:"0:08–0:14", short:"The proof", vo:"“Fully inspected. Every mile accounted for.”",
+    sub:"Macro · triptych montage",
+    action:"Three cuts: gloved hand and flashlight over an engine bay; odometer digits; polisher buffing a fender; keys dropped into a palm.",
+    cam:"100mm macro · locked, rack focus",
+    light:"Warm practicals, narrow shafts",
+    audio:"Ratchet clicks, buffing hum", art:shot3 },
+  { n:4, dur:6, tc:"0:14–0:20", short:"The lean", vo:"“Every rig here earns its second act.”",
+    sub:"Medium · hero truck",
+    action:"She leans back against the grille of a detailed heavy-duty pickup, arms crossed, easy confidence. Lot lights melt into bokeh behind her.",
+    cam:"50mm · locked off, slight low angle",
+    light:"Cross light, soft fill on face",
+    audio:"Music opens up, warm bass", art:shot4 },
+  { n:5, dur:5, tc:"0:20–0:26", short:"The handoff", vo:"“Go write the next chapter.”",
+    sub:"Two-shot · keys",
+    action:"She presses the keys into a young couple’s hands. They laugh; she watches them walk toward the truck, sun flaring.",
+    cam:"35mm · handheld, follow",
+    light:"Sun in lens, flare across frame",
+    audio:"Laughter, keys jingle, diesel turn", art:shot5 },
+  { n:6, dur:5, tc:"0:26–0:30", short:"End card", vo:"“US Truck Sales. South Gate. Certified. Inspected. Yours.”",
+    sub:"Graphic · logo lockup",
+    action:"Amber logo reveal on warm black. Tagline fades up, dealer line below.",
+    cam:"2D · centered, 1.02 slow scale",
+    light:"Graphic",
+    audio:"Final chord, tail reverb", art:shot6 }
+];
+
+/* ---------- player ---------- */
+const stage = document.getElementById("stage");
+const tcEl = document.getElementById("tc");
+const shotno = document.getElementById("shotno");
+const voEl = document.getElementById("vo");
+const subEl = document.getElementById("sub");
+const dAction = document.getElementById("d-action");
+const dCam = document.getElementById("d-cam");
+const dLight = document.getElementById("d-light");
+const dAudio = document.getElementById("d-audio");
+const fill = document.getElementById("fill");
+const counter = document.getElementById("counter");
+const playBtn = document.getElementById("play");
+const thumbs = document.getElementById("thumbs");
+const logoBug = document.getElementById("logo-bug");
+
+let i = 0, acc = 0, playing = false, raf = 0, last = 0;
+const total = shots.reduce((s, x) => s + x.dur, 0);
+const startOf = k => shots.slice(0, k).reduce((s, x) => s + x.dur, 0);
+const clock = s => `${String(Math.floor(s / 60)).padStart(2,"0")}:${String(Math.floor(s % 60)).padStart(2,"0")}`;
+
+shots.forEach((s, k) => {
+  const b = document.createElement("button");
+  b.className = "thumb";
+  b.innerHTML = `<b>${String(s.n).padStart(2,"0")} · ${s.short}</b>${s.tc}`;
+  b.addEventListener("click", () => { i = k; acc = 0; render(); });
+  thumbs.appendChild(b);
+});
+
+function render(){
+  const s = shots[i];
+  stage.querySelectorAll("svg").forEach(el => el.remove());
+  stage.insertAdjacentHTML("afterbegin", s.art());
+  tcEl.textContent = `${clock(startOf(i))} / ${clock(total)}`;
+  shotno.textContent = `Shot ${s.n} / 6`;
+  voEl.textContent = s.vo;
+  subEl.textContent = s.sub;
+  dAction.textContent = s.action;
+  dCam.textContent = s.cam;
+  dLight.textContent = s.light;
+  dAudio.textContent = s.audio;
+  counter.textContent = clock(startOf(i));
+  logoBug.classList.toggle("hidden", !(s.n >= 2 && s.n <= 5));
+  [...thumbs.children].forEach((b, k) => b.classList.toggle("on", k === i));
+  fill.style.width = `${(startOf(i) + acc) / total * 100}%`;
+}
+
+function loop(ts){
+  if (!playing) return;
+  if (!last) last = ts;
+  const dt = Math.min(120, ts - last);
+  last = ts;
+  acc += dt / 1000;
+  const s = shots[i];
+  if (acc >= s.dur){
+    if (i < shots.length - 1){ i++; acc = 0; render(); }
+    else { acc = s.dur; playing = false; setPlayLabel(); }
+  }
+  fill.style.width = `${Math.min(100, (startOf(i) + acc) / total * 100)}%`;
+  counter.textContent = clock(startOf(i) + Math.min(acc, s.dur));
+  if (playing) raf = requestAnimationFrame(loop);
+}
+
+function setPlayLabel(){
+  playBtn.textContent = playing ? "❚❚ Pause" : (i === shots.length - 1 && acc >= shots[i].dur ? "↺ Replay" : "▶ Play");
+}
+
+playBtn.addEventListener("click", () => {
+  if (playing){ playing = false; cancelAnimationFrame(raf); setPlayLabel(); return; }
+  if (i === shots.length - 1 && acc >= shots[i].dur){ i = 0; acc = 0; render(); }
+  playing = true; last = 0; setPlayLabel(); raf = requestAnimationFrame(loop);
+});
+document.getElementById("next").addEventListener("click", () => {
+  i = Math.min(shots.length - 1, i + 1); acc = 0; playing = false; cancelAnimationFrame(raf); render(); setPlayLabel();
+});
+document.getElementById("prev").addEventListener("click", () => {
+  i = Math.max(0, i - 1); acc = 0; playing = false; cancelAnimationFrame(raf); render(); setPlayLabel();
+});
+window.addEventListener("keydown", e => {
+  if (e.code === "Space"){ e.preventDefault(); playBtn.click(); }
+  if (e.code === "ArrowRight") document.getElementById("next").click();
+  if (e.code === "ArrowLeft") document.getElementById("prev").click();
+});
+
+render();
+setPlayLabel();
+</script>
+</body>
+</html>
