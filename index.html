@@ -392,38 +392,31 @@ function shot3(){
 function shot4(){
   return `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
     <defs>
-      <linearGradient id="sky4" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#1c100a"/><stop offset=".6" stop-color="#7c3f1c"/><stop offset="1" stop-color="#d98a3f"/>
+      <linearGradient id="slate4" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#6f7882"/><stop offset="1" stop-color="#5b6470"/>
       </linearGradient>
-      <linearGradient id="scrimTop4" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#140b06" stop-opacity=".9"/>
-        <stop offset=".6" stop-color="#140b06" stop-opacity=".2"/>
-        <stop offset="1" stop-color="#140b06" stop-opacity="0"/>
+      <linearGradient id="slatePanel4" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#7b858f"/><stop offset="1" stop-color="#59626c"/>
       </linearGradient>
-      <linearGradient id="scrimBot4" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#0b0603" stop-opacity="0"/>
-        <stop offset=".5" stop-color="#0b0603" stop-opacity=".7"/>
-        <stop offset="1" stop-color="#0b0603" stop-opacity=".96"/>
-      </linearGradient>
-      <radialGradient id="vig4" cx=".5" cy=".44" r=".78">
-        <stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".5"/>
+      <radialGradient id="key4" cx=".28" cy=".38" r=".45">
+        <stop offset="0" stop-color="#ffffff" stop-opacity=".18"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
       </radialGradient>
+      <linearGradient id="floor4" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#4c555f"/><stop offset="1" stop-color="#3f474f"/>
+      </linearGradient>
     </defs>
-    <rect width="1600" height="900" fill="url(#sky4)"/>
-    <!-- inventory plate: 2019 Peterbilt 579, dealer photo 01 (more sky crop). Alternates: 03.jpg -->
-    <image href="vehicles/2019-peterbilt-579/01.jpg" x="0" y="0" width="1600" height="900"
-      preserveAspectRatio="xMidYMid meet" opacity=".94"/>
-    <rect width="1600" height="900" fill="#b4581c" opacity=".16"/>
-    <rect width="1600" height="470" fill="url(#scrimTop4)"/>
-    <rect y="530" width="1600" height="370" fill="url(#scrimBot4)"/>
-    <rect width="1600" height="900" fill="url(#vig4)"/>
-    <circle cx="250" cy="300" r="240" fill="#f0a24a" opacity=".12"/>
+    <rect width="1600" height="900" fill="url(#slate4)"/>
+    <rect x="800" width="800" height="900" fill="#626b75"/>
+    <rect width="700" height="900" fill="url(#slatePanel4)" opacity=".55"/>
+    <rect width="1600" height="900" fill="url(#key4)"/>
+    <rect y="650" width="1600" height="250" fill="url(#floor4)"/>
+    <line x1="800" y1="0" x2="800" y2="900" stroke="#88939d" stroke-opacity=".18"/>
     <!-- contact shadow -->
-    <ellipse cx="700" cy="668" rx="200" ry="26" fill="#000" opacity=".5"/>
-    <!-- figure leaning -->
-    <g transform="translate(700 190)">
+    <ellipse cx="380" cy="668" rx="170" ry="24" fill="#000" opacity=".22"/>
+    <!-- spokesperson, left side -->
+    <g transform="translate(380 190)">
       <path d="M-122 470 C-118 330 -86 210 0 196 C86 210 118 330 122 470 Z" fill="#2a1a10"/>
-      <path d="M-122 470 C-118 330 -86 210 0 196 C86 210 118 330 122 470" fill="none" stroke="${AM}" stroke-opacity=".3" stroke-width="3"/>
+      <path d="M-122 470 C-118 330 -86 210 0 196 C86 210 118 330 122 470" fill="none" stroke="${AM}" stroke-opacity=".35" stroke-width="3"/>
       <path d="M-96 196 C-120 120 -104 40 -60 8 C-18 -22 40 -14 74 26 C104 62 110 130 92 196 C74 150 50 120 0 116 C-50 120 -78 150 -96 196 Z" fill="#221008"/>
       <ellipse cx="0" cy="150" rx="60" ry="72" fill="#6e4126"/>
       <path d="M-60 150 C-60 96 -36 74 0 74 C36 74 60 96 60 150 C50 118 32 104 0 104 C-32 104 -50 118 -60 150 Z" fill="#2a1409"/>
@@ -432,7 +425,7 @@ function shot4(){
       <path d="M-92 300 C-40 336 40 336 92 300" stroke="#33200f" stroke-width="34" fill="none" stroke-linecap="round"/>
       <path d="M-92 300 C-40 336 40 336 92 300" stroke="${AM}" stroke-opacity=".25" stroke-width="3" fill="none"/>
     </g>
-    <rect y="830" width="1600" height="70" fill="#0c0704" opacity=".5"/>
+    <rect y="830" width="1600" height="70" fill="#3f474f" opacity=".45"/>
 
   </svg>`;
 }
